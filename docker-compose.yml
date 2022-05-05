@@ -1,0 +1,20 @@
+ version: "3.7"
+ services:
+  auth:
+    build:
+      context: .
+    image: explabs/potee-auth
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=sOmE_sEcUrE_pAsS
+
+      - ACCESS_SECRET=98hbun98hsdfsdwesdfs
+      - REFRESH_SECRET=786dfdbjhsbsdfsdfsdf=value
+    ports:
+      - "8081:8080"
+  redis:
+    image: "redis:alpine"
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    ports:
+     - "6379:6379"
