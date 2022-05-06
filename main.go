@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/PoteeDev/auth/auth"
-	"github.com/explabs/ad-ctf-paas-api/database"
+	"github.com/PoteeDev/auth/storage"
 
 	handlers "github.com/PoteeDev/auth/handler"
 	"github.com/PoteeDev/auth/middleware"
@@ -28,7 +28,7 @@ func NewRedisDB(host, port, password string) *redis.Client {
 }
 
 func init() {
-	database.InitMongo()
+	storage.InitMongo()
 }
 
 func main() {

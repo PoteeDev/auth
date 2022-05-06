@@ -8,6 +8,7 @@ RUN go mod download
 COPY handler ./handler
 COPY auth ./auth
 COPY middleware ./middleware
+COPY storage ./storage
 COPY main.go main.go
 RUN CGO_ENABLED=0 GOOS=linux go build -a -o /auth .
 
