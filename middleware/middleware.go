@@ -18,3 +18,24 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func AdminAuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		err := auth.TokenValid(c.Request)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"detail": "unauthorized"})
+			c.Abort()
+			return
+		}
+		metadata, err := auth.NewToken().ExtractTokenMetadata(c.Request)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"detail": "unauthorized"})
+			return
+		}
+		if metadata.UserId != "admin" {
+			c.JSON(http.StatusUnauthorized, gin.H{"detail": "no access"})
+			c.Abort()
+		}
+		c.Next()
+	}
+}
