@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/PoteeDev/auth/auth"
-	"github.com/PoteeDev/auth/storage"
 
 	handlers "github.com/PoteeDev/auth/handler"
 	"github.com/PoteeDev/auth/middleware"
@@ -26,11 +25,6 @@ func NewRedisDB(host, port, password string) *redis.Client {
 	})
 	return redisClient
 }
-
-func init() {
-	storage.InitMongo()
-}
-
 func main() {
 
 	appAddr := ":" + os.Getenv("PORT")
