@@ -41,7 +41,11 @@ func main() {
 	var service = handlers.NewProfile(rd, tk)
 
 	var router = gin.Default()
-
+	router.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
 	router.POST("/login", service.Login)
 	router.POST("/logout", middleware.TokenAuthMiddleware(), service.Logout)
 	router.POST("/refresh", service.Refresh)

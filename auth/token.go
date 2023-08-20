@@ -3,12 +3,13 @@ package auth
 import (
 	"errors"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/twinj/uuid"
 	"net/http"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 )
 
 type tokenservice struct{}
@@ -22,13 +23,13 @@ type TokenInterface interface {
 	ExtractTokenMetadata(*http.Request) (*AccessDetails, error)
 }
 
-//Token implements the TokenInterface
+// Token implements the TokenInterface
 var _ TokenInterface = &tokenservice{}
 
 func (t *tokenservice) CreateToken(userId string) (*TokenDetails, error) {
 	td := &TokenDetails{}
 	td.AtExpires = time.Now().Add(time.Minute * 30).Unix() //expires after 30 min
-	td.TokenUuid = uuid.NewV4().String()
+	td.TokenUuid = uuid.NewString()
 
 	td.RtExpires = time.Now().Add(time.Hour * 24 * 7).Unix()
 	td.RefreshUuid = td.TokenUuid + "++" + userId
@@ -87,7 +88,7 @@ func verifyToken(r *http.Request) (*jwt.Token, error) {
 	return token, nil
 }
 
-//get the token from the request body
+// get the token from the request body
 func extractToken(r *http.Request) string {
 	bearToken := r.Header.Get("Authorization")
 	strArr := strings.Split(bearToken, " ")
@@ -103,7 +104,7 @@ func extract(token *jwt.Token) (*AccessDetails, error) {
 	if ok && token.Valid {
 		accessUuid, ok := claims["access_uuid"].(string)
 		userId, userOk := claims["user_id"].(string)
-		if ok == false  || userOk == false {
+		if ok == false || userOk == false {
 			return nil, errors.New("unauthorized")
 		} else {
 			return &AccessDetails{
@@ -126,6 +127,3 @@ func (t *tokenservice) ExtractTokenMetadata(r *http.Request) (*AccessDetails, er
 	}
 	return acc, nil
 }
-
-
-
